@@ -5,11 +5,17 @@ import urllib.request
 def SendMessange():
     value = dpg.get_value("TextToMessage")
     Chat.SendMassage(value)
-    # AddNewMessage(value)
+    AddNewMessage("You: " + value)
     dpg.set_value("TextToMessage", "")
 
 def AddNewMessage(text):
+    mes = dpg.add_text(default_value=text, parent="Chat")
+    # dpg.set_item_pos(mes, pos=[300, 50])
+
+def AddGetMessage(text):
     dpg.add_text(default_value=text, parent="Chat")
+# dpg.get_viewport_width() - dpg.get_item_width(mes) - 20
+
 
 def ChatVisual():
     dpg.create_context()
@@ -26,13 +32,12 @@ def ChatVisual():
     dpg.show_viewport()
 
     while dpg.is_dearpygui_running():
-
         response = urllib.request.urlopen("http://127.0.0.1:5000/")
         data = response.read()
         if str(data).replace("b'","").replace("'", "") == "":
             pass
         else:
-            AddNewMessage(str(data).replace("b'","").replace("'", ""))
+            AddGetMessage("His: "+str(data).replace("b'","").replace("'", ""))
             urllib.request.urlopen("http://127.0.0.1:5000/Delete")
 
         dpg.set_item_height("Chat", dpg.get_viewport_height())   

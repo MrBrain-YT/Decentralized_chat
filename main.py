@@ -5,7 +5,6 @@ import Server
 import urllib.request
 
 
-
 class Chat():
     def Getmessage():
         while True:
@@ -22,10 +21,9 @@ class Chat():
                 if not data:
                     break
                 else:
-                    urllib.request.urlopen(f"http://127.0.0.1:5000/?Text={str(data)}")
+                    urllib.request.urlopen(f"http://127.0.0.1:5000/?Text={str(data.decode())}")
                     print(data)
                 conn.send(data.upper())
-            
 
             conn.close()
 

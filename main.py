@@ -4,11 +4,6 @@ import Visual
 import Server
 import urllib.request
 
-'''
-hello my friend.
-Get My Money.
-Beatch!
-'''
 
 class Chat():
     def Getmessage():

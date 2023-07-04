@@ -4,14 +4,21 @@ import Visual
 import Server
 import urllib.request
 
+myIP = "192.168.0.103"
+myPort = 9090
 
 class Chat():
-    def Getmessage():
+
+    def __init__(self, ip, port):
+        self.ip = ip
+        self.port = port
+
+    def Getmessage(self):
         while True:
             server = socket.gethostbyname(socket.gethostname())
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.bind(('192.168.0.103', 9090)) 
-            sock.listen(1)
+            sock.bind((self.ip, int(self.port))) 
+            sock.listen(10)
             conn, addr = sock.accept()
 
             print('connected:', addr)
@@ -30,18 +37,17 @@ class Chat():
             conn.close()
 
 
-    def SendMassage(value):
+    def SendMassage(self, value):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect(('192.168.0.103', 9090))
-        sock.send(str.encode(value))
+        sock.connect((self.ip, self.port))
+        sock.send(str.encode(f"{self.ip}:{self.port}/" + value))
         data = sock.recv(1024)
         sock.close()
-        # print(data)
 
 
 if __name__ == '__main__':
     V = Process(target=Visual.ChatVisual)
-    G = Process(target=Chat.Getmessage)
+    G = Process(target=Chat(myIP, myPort).Getmessage)
     S = Process(target=Server.GetMessangeServer)
     S.start()
     V.start()

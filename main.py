@@ -4,7 +4,7 @@ import Visual
 import Server
 import urllib.request
 
-myIP = "192.168.0.103"
+myIP = "192.168.0.235"
 myPort = 9090
 
 class Chat():
@@ -29,20 +29,30 @@ class Chat():
                     break
                 else:
                     request = "http://127.0.0.1:5000/?Text=" + (data.decode()).replace('\n', '@_@').replace("\'", "")
-                    print(request)
-                    urllib.request.urlopen("http://127.0.0.1:5000/?Text=" + (data.decode()).replace('\n', '@_@').replace(" ", "@-@"))
-                    print(data)
+                    # print(request)
+                    urllib.request.urlopen("http://127.0.0.1:5000/?Text=" + (data.decode()).replace('\n', '@_@').replace(" ", "@-@").replace("\r","@^@"))
+                    # print(data)
                 conn.send(data.upper())
 
             conn.close()
 
 
     def SendMassage(self, value):
+        
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((self.ip, self.port))
-        sock.send(str.encode(f"{self.ip}:{self.port}/" + value))
-        data = sock.recv(1024)
-        sock.close()
+        try:
+            sock.connect((self.ip, self.port))
+            sock.send(str.encode(f"{self.ip}:{self.port}/" + value))
+            data = sock.recv(1024)
+            sock.close()
+            return "success"
+        except ConnectionRefusedError or TimeoutError as terr:
+            print("errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+            print(terr)
+            # return "error"
+        except Exception as err:
+            print(f"Exception: {err}")
+            # return "error"
 
 
 if __name__ == '__main__':
